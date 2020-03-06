@@ -19,8 +19,12 @@ rename() {
         name=${i//${STR1}/${STR2}}
         if [ "$i" != "$name" ]; then
             list="$list$i~~~->~~~${RED}$name${NC}\n"
-            if [ "$APPLY" = "true" ]; then
+            if [ "$APPLY" = "true" ]; 
+            then
                 mv "$i" "$name"
+            elif [ "$COPY" = "true" ];
+            then
+                cp "$i" "$name"
             fi
         fi
     done
@@ -31,6 +35,7 @@ rename() {
 help() {
     echo -e "usage:"
     echo -e "\t[-a | --apply]\t\tto apply the rename. By default will only simulate and show the results"
+    echo -e "\t[-c | --copy]\t\tto create files copy with the new names."
     echo -e "\t[-s1 | --str1 STRING1]\tSTRING1 is the string to look for in files names to be replaced"
     echo -e "\t[-s2 | --str2 STRING2]\tSTRING2 is the string to replace in the files names"
     echo -e "\t[-f | --file FILE]\tabsolute path to the CSV file with STRING1 and STRING2 rows"
@@ -46,6 +51,9 @@ for (( i=1; i<=$#; i++)); do
     case "$arg" in
         --apply | -a)
             APPLY="true"
+            ;;
+        --copy | -c)
+            COPY="true"
             ;;
         --file | -f)
             i=$((i+1))
